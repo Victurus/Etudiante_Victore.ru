@@ -1,0 +1,108 @@
+<?php
+	include_once "user.php";
+	include_once $_SERVER['DOCUMENT_ROOT'] . "/class/db_helper.php";
+
+	class employer extends user //Работодатель 
+	{
+		public $sertificaty; // Наличие у фирмы сертификатов
+		public $license; //Лицензия* на работу только для фирмы
+		public $who_needs; //Может пригодится здесь сделать выдачу вакансий,но скорее всего нет
+
+		function __construct($sertificat, $licen)
+		{
+			parent::__construct();
+			$this->who = true;
+			$this->sertificaty = $sertificat;
+			$this->license = $licen;
+			$this->who_needs = array("Вакансия 1" , "Вакансия 2" , "Вакансия 3");
+		}
+
+		function save_employer() // Заносит данные работодателя в БД работодателей
+		{
+			$this->save_user();
+
+			if($this->sertificaty)
+				echo "Сертификаты есть <br>";
+			if($this->license)
+				echo "Лицензия есть <br>";
+		}
+
+// 		function read_emp() // Под этим методом я подразумеваю считывание
+// 		{					// данных из БД об одном работодателе
+// 			$db = new db_helper("academycadres");
+// 			$db->connect_db();
+// 		}	
+
+// 		function display($db) // Метод отображения данных одного работодателя
+// 		{
+// 			$db->make_query("SELECT * FROM employers");
+
+// 			for($i = 0; $i < $db->rows_count();$i++)
+// 			{
+// 				$db->result->data_seek($i);
+// 				$row = $db->result->fetch_array(MYSQLI_NUM);
+// 				$text= <<<_END
+
+// 				<div class="emp_block">
+// 				<div class="emp_img">
+// 					<img src="users/employers/$row[3]" alt="Логотип компании" width="200" height="200">
+// 				</div>
+
+// 				<div class="emp_info"> 
+// 					<br>    
+// 					Название фирмы:    $row[1]    <br>
+						
+// 					Почта:             $row[5]  <br>
+						
+// 					Телефон оффиса:    $row[4] <br>
+						
+// 				</div>
+// _END;
+// 				$text.= "\n </div>";
+// 			}
+
+// 			return $text;
+// 		}
+
+		function employers_list() // Выдаёт список работодателей
+		{
+			$db = new db_helper("academycadres");
+			$db->connect_db();
+
+			$db->make_query("SELECT * FROM employers");
+			$text = '';
+
+			if($db->rows_count() == 0)
+				return <<<_EOT
+					<div class="emp_block">
+					<h3>Нет пока никого, будь первым!!!</h3>
+					</div>			
+_EOT;
+			else
+				for($i = 0; $i < $db->rows_count();$i++)
+				{
+					$db->result->data_seek($i);
+					$row = $db->result->fetch_array(MYSQLI_NUM);
+					$text .= <<<_END
+					<div class="emp_block">
+						<div class="emp_img">
+							<img src="/my_pages/reg/$row[3]" alt="Логотип компании" width="200" height="200">
+						</div>
+
+						<div class="emp_info"> 
+							<br>    
+							Название фирмы:    $row[1]    <br>
+								
+							Почта:             $row[5]  <br>
+								
+							Телефон оффиса:    $row[4] <br>
+								
+						</div>
+					</div>			
+_END;
+				}
+
+			return $text;
+		}
+	}
+?>
