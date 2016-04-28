@@ -11,7 +11,7 @@
 
 		function __construct($c_v, $sertific, $exp)
 		{
-			parent::__construct();
+			parent::__construct(1);
 			$this->who = false;
 			$this->cv = $c_v;
 			$this->sertificat = $sertific;

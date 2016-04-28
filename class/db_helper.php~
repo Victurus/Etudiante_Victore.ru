@@ -9,10 +9,10 @@
 		public $result;
 		protected $rows;
 		
-		function __construct()
+		function __construct($database)
 		{
 			$this->db_hostname = 'localhost';
-			$this->db_database = 'academycadres';
+			$this->db_database = $database;
 			$this->db_username = 'victor';
 			$this->db_password = 'MP123';
 		}
@@ -32,6 +32,7 @@
 		function rows_count()
 		{
 			$this->rows = $this->result->num_rows;
+
 			return $this->rows;
 		}
 

@@ -79,3 +79,93 @@ _END;
 _END;
 	}
 ?>
+
+
+
+<?php //db_helper.php
+	
+// 	$db_hostname = 'localhost';
+// 	$db_database = 'academycadres';
+// 	$db_username = 'victor';
+// 	$db_password = 'MP123';
+
+// /////...Это, как к базе подключаться через mysqli................................./////////////////////	
+// //	$db_conn = new mysqli($db_hostname, $db_username, $db_password, $db_database);
+// //	if(!$db_conn) mysql_fatal_error("Возникла ошибка");
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+// ////...Это, как к ней делать запрос.................................//////////
+// //	$result = $db_conn->query($query);
+// //	if(!$result) mysql_fatal_error("Сбой при доступе к база данных");
+// //////////////////////////////////////////////////////////////////////////////
+
+// ////...Эта функция показывает как работать с базой........///////////////////////////
+// 	function Describe_db()
+// 	{
+// 		$db_hostname = 'localhost';
+// 		$db_database = 'academycadres';
+// 		$db_username = 'victor';
+// 		$db_password = 'MP123';
+
+// 		$db_conn = new mysqli($db_hostname, $db_username, $db_password, $db_database);
+// 		if(!$db_conn) mysql_fatal_error("Возникла ошибка");
+
+// 		$query = "SHOW TABLES";
+
+// 		$result = $db_conn->query($query);
+// 		if(!$result) mysql_fatal_error("Сбой при доступе к базе данных");
+
+// 		$rows = $result->num_rows;
+
+// 		for($i = 0; $i < $rows; $i++)
+// 		{
+// 			$result->data_seek($i);
+// 			$row = $result->fetch_array("MYSQLI_NUM");
+// 			echo<<<_END
+// 			$row[0] <br><br>
+// _END;
+// 		}
+// 	}
+// //////////////////////////////////////////////////////////////////////////////////////
+
+// 	function db_close($result, $db_conn)
+// 	{
+// 		$result->close();
+// 		$db_conn->close();
+// 	}
+
+// 	function get_post($conn, $var)
+// 	{
+// 		return $conn->real_escape_string($_POST[$var]);
+// 	}
+
+// 	function sanitizeString($var)
+// 	{
+// 		$var = stripslashes($var);
+// 		$var = htmlentities($var);
+// 		$var = strip_tags($var);
+// 		return $var;
+// 	}
+
+// 	function sinitizeMySQL($conn, $var)
+// 	{
+// 		$var = mysqli_real_escape_string($conn, $var);
+// 		$var = sanitizeString($var);
+// 		return $var;
+// 	}
+
+// 	function mysql_fatal_error($msg)
+// 	{
+// 		$msg2 = mysql_error();
+// 		echo <<<_END
+// 		К сожалению, завершить запрашиваемую операцию не представилось возможным.
+// 		Было получено следующее сообщение об ошибке:
+// 		<p>$msg: $msg2 </p>
+// 		Пожалуйста нажмите кнопку возврата вашего браузера
+// 		и повторите попытку. Если проблемы не прекратятся,
+// 		пожалуйста, <a href= "index.php"> сообщите 
+// 		о них нашему администратору </a>
+// 		Спасибо.
+// _END;
+// 	}
+?>

@@ -1,6 +1,4 @@
 <?php //getContentx.php
-	include_once "Globals.php";
-	
 	if($_POST)
 		$str = $_POST['navchoose'];
 	else
