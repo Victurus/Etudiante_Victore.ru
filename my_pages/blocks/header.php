@@ -1,4 +1,7 @@
-<?php include_once "Globals.php";?>
+<?php 
+	include_once $_SERVER['DOCUMENT_ROOT'] . "/Globals.php";
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,16 +21,16 @@
 
 		<div id="right">
 			<img src="/images/logo1.png">
-		</div>	
+		</div>
 	</div>
 	
 	<div id="nav">
 		<ul>
-			<li><a href="/my_pages/main_page.php"> Главная               </a></li>
-			<li><a href="#"> Работодателю          </a></li>
-			<li><a href="#"> Соискателю            </a></li>
-			<li><a href="#"> Информация            </a></li>
-			<li><a href="#"> С кем мы сотрудничаем </a></li>			
+			<li><a href="/my_pages/index.php">       Главная               </a></li>
+			<li><a href="/my_pages/for_emp.php">     Работодателю          </a></li>
+			<li><a href="/my_pages/for_worker.php">  Соискателю            </a></li>
+			<li><a href="/my_pages/Information.php"> Информация            </a></li>
+			<li><a href="/my_pages/Partners.php">    С кем мы сотрудничаем </a></li>			
  			
 		</ul>
 	</div>

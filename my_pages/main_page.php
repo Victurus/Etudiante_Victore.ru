@@ -1,8 +1,7 @@
-<?php include_once "blocks/header.php";?>
 <div class="lr_item left">
 	<div class="left_header">
 		<span> С кем мы работаем: </span>
-	</div>	
+	</div>
 	<?php //main_page.php
 		include_once $_SERVER['DOCUMENT_ROOT']."/Globals.php";
 		$new_employer = new employer();
@@ -31,8 +30,7 @@
 			</div>
 				<input type="hidden" name="submitted" value="yes">
 				<input type= 'submit' value= 'Войти' autofocus="autofocus">
-				<input type= 'button' value= 'Зарегестрироваться' onclick="location.href='my_pages/registration.php' ">
+				<input type= 'button' value= 'Зарегестрироваться' onclick="location.href='registration.php' ">
 		</form>
 	</div>
 </div>
-<?php include_once "blocks/footer.php";?>

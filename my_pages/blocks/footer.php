@@ -1,4 +1,4 @@
-<div class="footer">
+	<div class="footer">
 		<?php
 			echo $footer . " ";
 			// date($format, $timestamp);
