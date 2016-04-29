@@ -11,6 +11,7 @@
 <meta charset="utf-8">
 <title><?php echo $title; ?></title>
 <link rel="stylesheet" href="/styles/menu.css">
+<link rel="stylesheet" href="/styles/femployer.css">
 </head>
 <body>
 	<div class="header">

@@ -31,27 +31,28 @@
 			$this->save_user();
 		}
 
-		function workers_list() // Выдаёт список из 20 работников
+		function workers_list() // Выдаёт список работников
 		{
 			$this->db->make_query("SELECT * FROM workers");
 			$text = '';
+			$rows = $this->db->rows_count();
 
-			if($this->db->rows_count() == 0)
-				return <<<_EOT
+			if($rows == 0)
+				$text = <<<_EOT
 					<div class="emp_block">
 					<h3>Нет пока никого, будь первым!!!</h3>
 					</div>			
 _EOT;
 			else
-				for($i = 0; $i < $db->rows_count();$i++)
+				for($i = 0; $i < $rows;$i++)
 				{
 					$this->db->result->data_seek($i);
-					$row = $dbthis->result->fetch_array(MYSQLI_NUMS);
+					$row = $this->db->result->fetch_array(MYSQLI_NUMS);
 
 					$text .= <<<_END
 			<div class="for_worker">
 				<div>
-					<img src="my_pages/reg/$row[3]" alt="Нет аватарки" height="100" width="60">
+					<img src="reg/$row[3]" alt="Нет аватарки" height="100" width="60">
 				</div>
 
 				<div class="info">
