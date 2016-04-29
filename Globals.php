@@ -1,7 +1,6 @@
 <?php //Globals.php
 	include_once "class/employer.php";
 	include_once "class/worker.php";
-	include_once "getContent.php";
 
 	$title = "Академия кадров";
 	$header = "<h4> Академия кадров </h4>

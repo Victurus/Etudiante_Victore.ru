@@ -20,13 +20,13 @@
 		function  connect_db()
 		{
 			$this->db_conn = new mysqli($this->db_hostname, $this->db_username, $this->db_password, $this->db_database);
-			if(!$this->db_conn) mysql_fatal_error("Возникла ошибка");
+			if(!$this->db_conn) mysql_fatal_error("Возникла ошибка", $this->db_conn);
 		}
 
 		function make_query($query)
 		{
 			$this->result = $this->db_conn->query($query);
-			if(!$this->result) mysql_fatal_error("Сбой при доступе к база данных");
+			if(!$this->result) mysql_fatal_error("Сбой при доступе к базе данных", $this->db_conn);
 		}
 
 		function rows_count()
@@ -56,16 +56,16 @@
 		return $var;
 	}
 
-	function sinitizeMySQL($conn, $var)
+	function sanitizeMySQL($conn, $var)
 	{
 		$var = mysqli_real_escape_string($conn, $var);
 		$var = sanitizeString($var);
 		return $var;
 	}
 
-	function mysql_fatal_error($msg)
+	function mysql_fatal_error($msg, $connection)
 	{
-		$msg2 = mysql_error();
+		$msg2 = $connection->error;
 		echo <<<_END
 		К сожалению, завершить запрашиваемую операцию не представилось возможным.
 		Было получено следующее сообщение об ошибке:

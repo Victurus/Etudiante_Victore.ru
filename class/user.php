@@ -12,6 +12,7 @@
 		protected $who; //Кто это? - работадатель == 1, работник == 0
 
 		protected $name; // ФИО* или Название организации
+		protected $login;
 		protected $password; // Пароль произвольного пользователя
 
 		protected $e_mail; //Почта*
