@@ -3,8 +3,10 @@
 
 	$db = new db_helper();
 	$db->connect_db();
-?>
+	
+	session_start();
 
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,6 +23,7 @@
 
 		<div id="header-text">
 			<?php echo $header; ?>
+			
 		</div>
 
 		<div id="right">
@@ -34,7 +37,17 @@
 			<li><a href="for_emp.php">     Работодателю          </a></li>
 			<li><a href="for_worker.php">  Соискателю            </a></li>
 			<li><a href="Information.php"> Информация            </a></li>
-			<li><a href="Partners.php">    С кем мы сотрудничаем </a></li>			
- 			
+			<li><a href="Partners.php">    С кем мы сотрудничаем </a></li>		
+			
+				<div class="user_name">
+					<?php 
+						if(isset($_SESSION['username']))
+							if($_SESSION['username'] != 'none')
+								echo "Вы зашли под именем" . $_SESSION['username']; 
+							else
+								echo "Пройдите регистрацию в форме на главной"
+					?>
+				</div>	
+			
 		</ul>
 	</div>

@@ -7,6 +7,7 @@
 		// public $sertificaty; // Наличие у фирмы сертификатов
 		// public $license; //Лицензия* на работу только для фирмы
 		public $who_needs; //Может пригодится здесь сделать выдачу вакансий,но скорее всего нет
+		private $path;
 		private $db;
 
 
@@ -20,11 +21,27 @@
 		function save_employer() // Заносит данные работодателя в БД работодателей
 		{
 			$this->save_user();
+			
+			$this->db->make_query("SELECT * FROM users WHERE login='$this->login'");
+
+			if(!$this->db->rows_count())
+			{
+				$this->db->make_query("INSERT INTO users VALUES('NULL' , '$this->login' , '$this->password')");
+				$this->db->make_query("SELECT * FROM users WHERE login='$this->login'");
+				$row = $this->db->result->fetch_array(MYSQLI_NUM);
+
+				$this->db->make_query("INSERT INTO employers VALUES ('NULL' , '$this->name' , '$this->path' , '$this->tel_dom' , '$this->e_mail' , '$row[0]')");
+				return "Регистрация прошла упешно";
+			}
+			else
+			{
+				return "Пользователь с таким именем уже существует, придумайте другое";
+			}
 		}
 
-		function employers_list() // Выдаёт список работодателей
+		function employers_list($condition) // Выдаёт список работодателей
 		{
-			$this->db->make_query("SELECT * FROM employers");
+			$this->db->make_query("SELECT * FROM employers $condition");
 			$text = '';
 
 			if($this->db->rows_count() == 0)
@@ -59,6 +76,11 @@ _END;
 
 			$this->db->db_close();
 			return $text;
+		}
+
+		function set_path($new_path)
+		{
+			$this->path = $new_path;
 		}
 	}
 ?>

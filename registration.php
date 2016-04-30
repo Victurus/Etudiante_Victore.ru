@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Простой вопрос</title>
-<link rel="stylesheet" href="/styles/registration.css">
+<link rel="stylesheet" href="/styles/registration_menu.css">
 </head>
 <body>
 

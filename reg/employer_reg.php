@@ -15,10 +15,10 @@
 
 	if(isset($_POST['login']))
 	{
-		$login = sanitizeString($_POST['login']);
+		$new_emp->set_login( sanitizeString($_POST['login']));
 		if(isset($_POST['org_name']))
 		{
-			$org_name = sanitizeString($_POST['org_name']);
+			$new_emp->set_name( sanitizeString($_POST['org_name']));
 
 			if(isset($_POST['pass1']) && isset($_POST['pass2']))
 			{
@@ -27,13 +27,15 @@
 
 				if($pass1 == $pass2)
 				{
+					$new_emp->set_password($pass1);
+
 					if($_POST['e_mail'])
 					{
-						$e_mail = sanitizeString($_POST['e_mail']);
+						$new_emp->set_email( sanitizeString($_POST['e_mail']));
 
 						if($_POST['tel'])
 						{
-							$tel = sanitizeString($_POST['tel']);
+							$new_emp->set_teldom( sanitizeString($_POST['tel']));
 
 							if($_FILES)
 							{
@@ -53,27 +55,13 @@
 								{
 									$now = time();
 									$n = "users/employers/$now.$ext";
+									$new_emp->set_path($n);
 									move_uploaded_file($_FILES['filename']['tmp_name'], $n);
 									$img_message = "Вот ваша аватарка '$name':<br>";
 									$img_message .= "<img src= '$n' >";
 
-									$db->make_query("SELECT * FROM users WHERE login='$login'");
-
-									if(!$db->rows_count())
-									{
-										$db->make_query("INSERT INTO users VALUES('NULL' , '$login' , '$pass1')");
-										$db->make_query("SELECT * FROM users WHERE login='$login'");
-										$row = $db->result->fetch_array(MYSQLI_NUM);
-
-										$db->make_query("INSERT INTO employers VALUES ('NULL' , '$org_name' , '$n' , '$tel' , '$e_mail' , '$row[0]')");
-										
-									}
-									else
-									{
-										$login_msg = "Пользователь с таким именем уже существует, придумайте другой";
-									}
-									//$db->result->close();
-									//$db->db_conn->close();
+									$login_msg = $new_emp->save_employer();
+									
 								}
 								else
 									$img_message = "'$name' - неприемлимый файл изображения";
@@ -116,16 +104,18 @@
 <head>
 <meta charset="utf-8">
 <title>Регистрация работодателя</title>
+<link rel="stylesheet" href="/styles/registration.css">
 </head>
 <body>
-	<div class="header">
-		<h2>Регистрация</h2>
-		<h3>Заполните пожалуйста все поля</h3>
-	</div>
 	<div class="main">
-	<pre>
-<form action="employer_reg.php" method="post" enctype= 'multipart/form-data'>
-
+		<div class="header">
+			<h2>Регистрация</h2>
+			<h3>Заполните пожалуйста все поля</h3>
+		</div>
+		
+		<div class="reg-block">
+			<pre>
+				<form action="employer_reg.php" method="post" enctype= 'multipart/form-data'>
 Придумайте логин                 <input type="text"     name="login"    size="20"> <?php echo $login_msg;    ?>  
 Придумайте пароль                <input type="password" name="pass1"    size="20">
 Повторите пароль                 <input type="password" name="pass2"    size="20"> <?php echo $pass_msg;     ?>  
@@ -133,9 +123,10 @@
 Введите e_mail                   <input type="text"     name="e_mail"   size="20"> <?php echo $e_mail_msg;   ?>  
 Введите основной телефон         <input type="text"     name="tel"      size="20"> <?php echo $tel_msg;      ?>  
 Загрузите аватарку с расширением JPG, GIF, PNG или TIF:
-<input type= 'file' name= 'filename' size= '10'>  <input type= 'submit' value= 'Загрузить'> <?php echo $img_message; ?>
-</form>
-	</pre>
+<input type= 'file' name= 'filename' size= '10'>  <input type= 'submit' value= 'Загрегестрироваться'> <?php echo $img_message; ?>
+				</form>
+			</pre>
+		</div>
 	</div>
 </body>
 </html>

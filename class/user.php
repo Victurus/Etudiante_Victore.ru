@@ -15,7 +15,7 @@
 		protected $login;
 		protected $password; // Пароль произвольного пользователя
 
-		protected $e_mail; //Почта*
+		protected $e_mail;  //Почта*
 		protected $tel_mob; // рабочий телефонный номер*
 		protected $tel_dom; //домашний телефонный номер*
 		
@@ -28,10 +28,10 @@
 		{		
 		///...Это область создания и сохранения логов.....//////////////////////////////////////
 			$t = date("Y:m");
-			$logs = fopen("logs/log_$t.txt", "a") or die("Усё сервак накрылся, музыки не будет");
+			$logs = fopen("/home/victor/Data/sites/Etudiante_Victore.ru/logs/log_$t.txt", "a") or die("Усё сервак накрылся, музыки не будет");
 			$ec_t = date("Y:m:d - H:i:s");
 			$text = <<<_END
-	[$ec_t] $this->name зарегистрирован. \n
+	[$ec_t] $this->name зарегистрирован. Под логином $this->login \n
 _END;
 			fwrite($logs, $text) or die("Ошибка сохранения файла");
 			fclose($logs);
@@ -40,6 +40,11 @@ _END;
 		function set_name($new_name)
 		{
 			$this->name = $new_name;
+		}
+
+		function set_login($new_login)
+		{
+			$this->login = $new_login;
 		}
 
 		function set_password($pass)
