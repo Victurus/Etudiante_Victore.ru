@@ -12,3 +12,17 @@ body
 {
 	margin: 10px 10px 20px 30px;
 }
+
+.main .reg-block
+{
+	background-color: lightblue;
+	/*text-align: right;*/
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.main .reg-block .lines
+{
+	margin:5px;
+}

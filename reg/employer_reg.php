@@ -8,8 +8,8 @@
 	$e_mail_msg = '';
 	$tel_msg = '';
 
-	$db = new db_helper();
-	$db->connect_db();
+	//$db = new db_helper();
+	//$db->connect_db();
 
 	$new_emp = new employer();
 
@@ -29,11 +29,11 @@
 				{
 					$new_emp->set_password($pass1);
 
-					if($_POST['e_mail'])
+					if(isset($_POST['e_mail']))
 					{
 						$new_emp->set_email( sanitizeString($_POST['e_mail']));
 
-						if($_POST['tel'])
+						if(isset($_POST['tel']))
 						{
 							$new_emp->set_teldom( sanitizeString($_POST['tel']));
 

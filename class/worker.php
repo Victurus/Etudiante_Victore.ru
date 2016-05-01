@@ -3,11 +3,12 @@
 
 	class worker extends user //класс работника
 	{
-		public $cv; // Резюме*
 		// public $sertificat; //Сертфикаты о дополнительном образовании
 		private $experience; //Опыт работы
 		private $year, $month, $day; //дата рождения
 		private $profession;
+		private $imgpath;
+		private $curvitaepath;
 		private $db;
 
 		function __construct()
@@ -18,22 +19,22 @@
 			$this->db->connect_db();
 		}
 
-		function save_worker()
+		function save_worker($knarea_id, $workt_id)
 		{
 			$this->save_user();
 
-			$this->save_user();
 			$this->db->make_query("SELECT * FROM users WHERE login='$this->login'");
 
 			if(!$this->db->rows_count())
 			{
 				$this->db->make_query("INSERT INTO users VALUES('NULL' , '$this->login' , '$this->password')");
 
-
 				$this->db->make_query("SELECT * FROM users WHERE login='$this->login'");
 				$row = $this->db->result->fetch_array(MYSQLI_NUM);
 
-				$this->db->make_query("INSERT INTO workers VALUES ('NULL' , '$this->name' , '$this->e_mail' , '$this->tel_mob' , '$this->tel_dom' , '$this->experience' , '$this->profession' , '$this->curvitae' , '$this->born' , '$knarea_id' , '$workt_id'  , '$row[0]')");
+				$born = $this->year . "-" . $this->month . "-" . $this->date;
+
+				$this->db->make_query("INSERT INTO workers VALUES ('NULL' , '$this->name' , '$this->e_mail' , '$this->tel_mob' , '$this->tel_dom' , '$this->experience' , '$this->profession' , '$this->curvitaepath', '$this->imgpath' , '$born' , '$knarea_id' , '$workt_id' , '$row[0]')");
 				return "Регистрация прошла упешно";
 			}
 			else
@@ -58,29 +59,61 @@ _EOT;
 				for($i = 0; $i < $rows;$i++)
 				{
 					$this->db->result->data_seek($i);
-					$row = $this->db->result->fetch_array(MYSQLI_NUMS);
+					$row = $this->db->result->fetch_array(MYSQLI_NUM);
 
 					$text .= <<<_END
-			<div class="for_worker">
+			<div class="worker_block">
 				<div>
-					<img src="reg/$row[3]" alt="Нет аватарки" height="100" width="60">
+					<img src="reg/$row[8]" alt="Нет аватарки" height="auto" width="200">
 				</div>
 
-				<div class="info">
-					<br> Имя         $row[0] <br>
-					     Опыт работы $row[1] <br>
-					     Профессия   $row[2] <br>
-				</div>
-
-				<div class="description">
-					О себе: <br>
-					$row[3]
+				<div class="worker_info">
+				<pre>
+Имя:        $row[1]
+Опыт работы:$row[5]
+Профессия:  $row[6]
+				</pre>
 				</div>
 			</div>
 _END;
 				}
 
 			return $text;
+		}
+
+		function set_imgpath($new_path)
+		{
+			$this->imgpath = $new_path;
+		}
+
+		function set_docpath($new_path)
+		{
+			$this->curvitaepath = $new_path;
+		}
+
+		function set_year($var)
+		{
+			$this->year = $var;
+		}
+
+		function set_month($var)
+		{
+			$this->month = $var;
+		}
+
+		function set_date($var)
+		{
+			$this->date = $var;
+		}
+
+		function set_experience($var)
+		{
+			$this->experience = $var;
+		}
+
+		function set_profession($var)
+		{
+			$this->profession = $var;
 		}
 	}
 ?>

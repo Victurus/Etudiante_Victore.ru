@@ -238,6 +238,28 @@ a
 	display:flex;
 }	
 
+.worker_block
+{
+	display:flex;
+	background: #7FFFD4; /* Цвет фона */
+	width: 100%;
+	border: 5px inset #8A2BE2;
+	padding: 10px 20px;
+    margin: 10px 20px; /* Отступы верх-низ и по бокам*/
+}
+
+.worker_block img
+{
+	display: flex;
+}
+
+.worker_block .worker_info
+{
+	display: flex;
+	font-size: 20px;
+	padding-left: 10px;
+}
+
 .footer
 {
 	width:100%;
