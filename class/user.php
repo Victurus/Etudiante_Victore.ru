@@ -1,4 +1,6 @@
 <?php
+	include_once "db_helper.php";
+
 	class user
 	{
 		/* 
@@ -7,62 +9,62 @@
 		 *  данных о нём из/в БД
 		*/
 
-		public $who; //Кто это? - работадатель == 1, работник == 0
-		private $password; // Пароль произвольного пользователя
-		
+		protected $who; //Кто это? - работадатель == 1, работник == 0
 
-		public $name; // ФИО* или Название организации
-		public $e_mail; //Почта*
-		public $tel_dom; //домашний телефонный номер*
-		public $tel_mob; // рабочий телефонный номер*
+		protected $name; // ФИО* или Название организации
+		protected $login;
+		protected $password; // Пароль произвольного пользователя
+
+		protected $e_mail;  //Почта*
+		protected $tel_mob; // рабочий телефонный номер*
+		protected $tel_dom; //домашний телефонный номер*
 		
-		function __construct()
+		function __construct($who_is_it)
 		{
-			$this->name = "ФИО";
-			$this->password = "пароль";
-			$this->e_mail = "my_email.com";
-			$this->tel_num = "Номер телефона пользователя";
+			$who = $who_is_it;
 		}
 
 		function save_user()
-		{
-			echo "Сохранить - $this->name <br>";
-			echo "Сохранить - $this->password <br>";
-			echo "Сохранить - $this->e_mail <br>";
-			echo "Сохранить - $this->tel_mob <br>";
-			echo "Сохранить - $this->tel_dom <br>";
-			
+		{		
+		///...Это область создания и сохранения логов.....//////////////////////////////////////
 			$t = date("Y:m");
-			$logs = fopen("logs/log_$t.txt", "a") or die("Усё сервак накрылся, музыки не будет");
+			$logs = fopen("/home/victor/Data/sites/Etudiante_Victore.ru/logs/log_$t.txt", "a") or die("Усё сервак накрылся, музыки не будет");
 			$ec_t = date("Y:m:d - H:i:s");
 			$text = <<<_END
-	[$ec_t] $this->name зарегистрирован + случайно гененрируемый для каждого id\n
+	[$ec_t] $this->name зарегистрирован. Под логином $this->login \n
 _END;
 			fwrite($logs, $text) or die("Ошибка сохранения файла");
 			fclose($logs);
 		}		
 
-		function get_name()
+		function set_name($new_name)
 		{
-			return $this->name;
+			$this->name = $new_name;
 		}
 
-		function get_email()
+		function set_login($new_login)
 		{
-			return $this->e_mail;
+			$this->login = $new_login;
 		}
 
-		function get_telnum()
+		function set_password($pass)
 		{
-			return $this->tel_num;
+			$this->password = $pass;
 		}
 
-		function who_st() //кто это
+		function set_email($new_email)
 		{
-			if($this->who)
-				echo "<hr> Работодатель";
-			else
-				echo "<hr> Соискатель";
+			$this->e_mail = $new_email;
+		}
+
+		function set_telmob($new_telmob)
+		{
+			$this->tel_mob = $new_telmob;
+		}
+
+		function set_teldom($new_teldom)
+		{
+			$this->tel_dom = $new_teldom;
 		}
 	}
 ?>

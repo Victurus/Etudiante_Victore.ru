@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Простой вопрос</title>
-<link rel="stylesheet" href="/styles/registration.css">
+<link rel="stylesheet" href="/styles/registration_menu.css">
 </head>
 <body>
 
@@ -15,8 +15,8 @@
 
 	<div class="chooser">
 		<ul>
-			<li><a href="reg/employer.php">Работодателем</a></li>
-			<li><a href="reg/worker.php">Соискателем</a></li>
+			<li><a href="reg/employer_reg.php">Работодателем</a></li>
+			<li><a href="reg/worker_reg.php">Соискателем</a></li>
 		</ul>
 	</div>
 

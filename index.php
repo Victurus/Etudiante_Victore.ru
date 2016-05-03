@@ -1,95 +1,79 @@
-<?php  
-	   include_once "getContent.php";
+<?php
+	include_once "header.php";
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title><?php echo $title; ?></title>
-<link rel="stylesheet" href="styles/menu.css">
-<script src="jquery-1.12.3.js"></script>
-</head>
-<body>
-	<div class="header">
-		<div id="left">
-			<img src="images/logo.png">
-		</div>
-
-		<div id="header-text">
-			<?php echo $header; ?>
-		</div>
-
-		<div id="right">
-			<img src="images/logo1.png">
+<div class= 'flex-container'>
+	<div class="lr_item left">
+		<div class="left_header">
+			<span> С кем мы работаем: </span>
 		</div>	
-	</div>
-	
-	<div id="nav">
-		<ul>
-			<li><a class="menu_btn"  nav_choose="Home"        href="#">  Главная               </a></li>
-			<li><a class="menu_btn1" nav_choose="for_emp"     href="#"> Работодателю          </a></li>
-			<li><a class="menu_btn2" nav_choose="for_worker"  href="#"> Соискателю            </a></li>
-			<li><a class="menu_btn3" nav_choose="Information" href="#"> Информация            </a></li>
-			<li><a class="menu_btn4" nav_choose="Partners"    href="#"> С кем мы сотрудничаем </a></li>			
- 			<script type="text/javascript">
-				$('.menu_btn').click(function()
-				{
-					$.post("getContent.php",{navchoose: "Home"}, parse);
-					function parse(data)
-					{
-						$('.flex-container').html(data);
-					}
-				});      	
-				$('.menu_btn1').click(function()
-				{
-					$.post("getContent.php",{navchoose: "for_emp"}, parse);
-					function parse(data)
-					{
-						$('.flex-container').html(data);
-					}
-				});
-				$('.menu_btn2').click(function()
-				{
-					$.post("getContent.php",{navchoose: "for_worker"}, parse);
-					function parse(data)
-					{
-						$('.flex-container').html(data);
-					}
-				});
-				$('.menu_btn3').click(function()
-				{
-					$.post("getContent.php",{navchoose: "Information"}, parse);
-					function parse(data)
-					{
-						$('.flex-container').html(data);
-					}
-				});
-				$('.menu_btn4').click(function()
-				{
-					$.post("getContent.php",{navchoose: "Partners"}, parse);
-					function parse(data)
-					{
-						$('.flex-container').html(data);
-					}
-				});
-			</script>
-		</ul>
-	</div>
-
-	<div class= "flex-container">
-		<?php 		
-			include_once "my_pages/main_page.php";
+		<?php //main_page.php
+			$new_employer = new employer();
+			echo $new_employer->employers_list('');
 		?>
 	</div>
 
-	<div class="footer">
+	<div class="lr_item right">
+
 		<?php
-			echo $footer . " ";
-			// date($format, $timestamp);
-			echo "Today is " . date("l F jS, Y - G:i:s", time());
-			#string date ( string $format [, int $timestamp = time() ] )
-		?>
+			if(!isAuth())
+			{
+				$msg = $_SESSION['msg'];
+			echo <<<_END
+	<div class="form">
+		Авторизация: <span id='authentication_msg'> $msg  </span>
+
+		<form method='post' action= 'index.php'>
+			<div class="logpass">
+
+				<div class="login">
+					Логин:
+					<div class="input_log">
+						<input type='text' name='login' size='15' placeholder="Введите логин"> <br>
+					</div>
+				</div>
+
+				<div class="pass">
+					Пароль:
+					<div class="input_pass">
+						<input type='password' name='pass' size='15' placeholder="Введите пароль"> <br>
+					</div>
+				</div>
+			</div>
+				<input type= 'submit' value= 'Войти' autofocus="autofocus">
+				<input type= 'button' value= 'Зарегестрироваться' onclick="location.href='registration.php'">
+		</form>
 	</div>
-</body>
-</html>
+_END;
+			}
+			else
+			{
+				if($_SESSION['who'])
+				{
+					$link = "<a href='priv_kab_employer.php'>Войти в личный кабинет</a>";
+				}
+				else
+					$link = "<a href='priv_kab_worker.php'>Войти в личный кабинет</a>";
+
+				$username = $_SESSION['username'];
+				echo <<<_REG
+		<div class="form">
+			<form method='post' action='index.php'>
+				Приветствую: $username <br>
+				<input type="hidden" name="submitted" value="yes">
+				<input type="submit" name="out" value="Выйти">
+			</form>
+
+			<div class='en_prkab'>
+				$link
+			</div>
+		</div>
+		
+_REG;
+			}
+
+		?>
+
+
+	</div>
+</div>
+<?php include_once "footer.php";?>

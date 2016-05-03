@@ -9,10 +9,10 @@
 		public $result;
 		protected $rows;
 		
-		function __construct()
+		function __construct($database)
 		{
 			$this->db_hostname = 'localhost';
-			$this->db_database = 'academycadres';
+			$this->db_database = $database;
 			$this->db_username = 'victor';
 			$this->db_password = 'MP123';
 		}
@@ -20,18 +20,19 @@
 		function  connect_db()
 		{
 			$this->db_conn = new mysqli($this->db_hostname, $this->db_username, $this->db_password, $this->db_database);
-			if(!$this->db_conn) mysql_fatal_error("Возникла ошибка", $this->db_conn);
+			if(!$this->db_conn) mysql_fatal_error("Возникла ошибка");
 		}
 
 		function make_query($query)
 		{
 			$this->result = $this->db_conn->query($query);
-			if(!$this->result) mysql_fatal_error("Сбой при доступе к базе данных", $this->db_conn);
+			if(!$this->result) mysql_fatal_error("Сбой при доступе к база данных");
 		}
 
 		function rows_count()
 		{
 			$this->rows = $this->result->num_rows;
+
 			return $this->rows;
 		}
 
@@ -56,16 +57,16 @@
 		return $var;
 	}
 
-	function sanitizeMySQL($conn, $var)
+	function sinitizeMySQL($conn, $var)
 	{
 		$var = mysqli_real_escape_string($conn, $var);
 		$var = sanitizeString($var);
 		return $var;
 	}
 
-	function mysql_fatal_error($msg, $connection)
+	function mysql_fatal_error($msg)
 	{
-		$msg2 = $connection->error;
+		$msg2 = mysql_error();
 		echo <<<_END
 		К сожалению, завершить запрашиваемую операцию не представилось возможным.
 		Было получено следующее сообщение об ошибке:

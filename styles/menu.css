@@ -10,6 +10,7 @@ body
 	color:#333333;
   	font-family:Arial, Helvetica, sans-serif;
   	font-size:14px;
+  	overflow-x: hidden; 
 }
 
 a
@@ -64,6 +65,7 @@ a
 
 #nav
 {
+	width:auto;
   	overflow:auto;
   	padding:1px;
   	background-color:#D2D2D2;
@@ -73,6 +75,7 @@ a
 {
 	margin:0;
 	padding:0;
+	background-color:#D2D2D2;
 }
 
 #nav ul li
@@ -80,6 +83,7 @@ a
 	float:left;
 	list-style: none;
 	padding:0;
+	background-color:#D2D2D2;
 }
 
 #nav ul li a
@@ -104,6 +108,17 @@ a
 	background-color: lightblue;
 }
 
+#nav ul div
+{
+	display:block;
+	width:auto;
+	height:15px;
+	padding: 8px 10px;
+	margin: 0 1px 0 0;
+	background-color: #8A2BE2;
+	text-align:center;
+}
+
 .flex-container
 {
 	display: flex; /* Флексы */
@@ -113,7 +128,6 @@ a
 .lr_item
 {
 	display: flex; /* Флексы */
-
 }
 
 .left
@@ -214,6 +228,28 @@ a
 	margin-left:4px;	
 }
 
+.right .form .en_prkab
+{
+	margin:0;
+	padding:0;
+	width:100%;
+}
+
+.right .form .en_prkab a
+{
+	display:block;
+	background-color: white;
+	border:2px outset grey;
+	text-align: center;
+	margin-top: 10px;
+	padding:30px 0 30px 0;
+}
+
+.right .form .en_prkab a:hover
+{
+	background-color: lightblue;
+}
+
 .right #wlcm
 {
 	margin-left: 10px;
@@ -222,9 +258,8 @@ a
 .right #wlcm img
 {
 	width:100%;
-	/*height:100%;*/
 	display:flex;
-}	
+}
 
 .footer
 {
