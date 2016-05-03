@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Add</title>
+<script src="../reg/JS/functions.js"></script>
 </head>
 <style type="text/css">
 	.myclass .btn input
@@ -21,87 +22,96 @@
 </style>
 <body>
 
-<?php //db_helper2.php
+		<?php
 
-	session_start();
+		include_once $_SERVER['DOCUMENT_ROOT'] . "/class/db_helper.php";
 
-	$hn = "localhost";
-	$db = "academycadres";
-	$un = "victor";
-	$pw = "MP123";
-
-	
-
-	$conn = new mysqli($hn, $un, $pw, $db);
-	if($conn->connect_error) mysql_fatal_error("Возникла ошибка");
+		$db = new db_helper();
+		$db->connect_db();
 
 /////////////....Удаление элемента..............///////////////
-	if (isset($_POST['delete']) && isset($_POST['workt_id']))
+	if (isset($_POST['delete']) && isset($_POST['vac_id']))
 	{
-		$workt_id = get_post($conn, 'workt_id');
-		$query = "DELETE FROM work_type WHERE workt_id='$workt_id'";
-		$result = $conn->query($query);
-		if (!$result) echo "DELETE failed: $query<br>" .
-			$conn->error . "<br><br>";
+		$vac_id = get_post($db->db_conn, 'vac_id');
+		$db->make_query("DELETE FROM vacancy WHERE vac_id='$vac_id'");
 	}
-/////////////////////////////////////////////////////////////////
+
+	// if(isset($_POST['knarea']) && isset($_POST['workt']))
 
 ///////.........Добавление элемента..............////////////////
-	if(!isset($_SESION['v']))
-			$_SESION['v'] = 0;
-	if (isset($_POST['name']) && isset($_POST['knarea_id']))
+	if (isset($_POST['knarea'])     && isset($_POST['workt'])  &&
+		isset($_POST['name'])       && isset($_POST['salary']) &&
+		isset($_POST['occupation']) && isset($_POST['description']))
 	{
-		$name = get_post($conn, 'name');
-		$knarea_id = get_post($conn, 'knarea_id');
+		$name = get_post($db->db_conn, 'name');
+		$salary = get_post($db->db_conn, 'salary');
+		$occupation = get_post($db->db_conn, 'occupation');
+		$description = get_post($db->db_conn, 'description');
+		$knarea_id = get_post($db->db_conn, 'knarea');
+		$workt_id = get_post($db->db_conn, 'workt');
+		$emp_id = 1;
 
-		if($_SESION['v'] != $knarea_id)
-		{
-			$_SESION['v'] = $knarea_id;
-		}
-
-
-		$query = "INSERT INTO work_type VALUES" . 
-			"('NULL' , '$name' , '$knarea_id')";
-		$result = $conn->query($query);
-		if (!$result) echo "INSERT failed: $query<br>" .
-		$conn->error . "<br><br>";
+		$db->make_query("INSERT INTO vacancy VALUES ('NULL' , '$knarea_id' , '$workt_id', '$emp_id', '$name', '$description', '$salary', '$occupation', 'NULL')");
 	}
-	$v = $_SESION['v'];
-/////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////
+	
+	$db->make_query("SELECT * FROM knowledge_area");
+	$selector  = "<div class='text'>Выберите вашу область знания:</div>";
+	$selector .= "<select name='knarea' size='1' onchange='send_get(this.options[this.selectedIndex].value)'>";
+	$selector .= "<option value='1000'></option>";
+	
+	for($i = 0; $i < $db->rows_count(); $i++)
+	{
+		$db->result->data_seek($i);
+		$row = $db->result->fetch_array(MYSQLI_NUM);
+
+		$selector .= "<option value='$row[0]'> $row[1]</option>";
+	}
+
+	$selector .= "</select>";
+
+	echo "<div class='myclass'> <form action='db_helper2.php' method='post'>";
+	echo $selector;
+	echo "<div class='lines' id='workt_p'></div>";
+
 	echo <<<_END
-	<div class="myclass">
-<form action="db_helper2.php" method="post"><pre>
-Work_type          <input type="text" name="name" size="50" autofocus="autofocus">
-knowledge_area_id  <input type="text" name="knarea_id" value="$v" size="50">
+<pre>
+Название должности <input type="text" name="name" size="50">
+Заработная плата   <input type="text" name='salary' size='50'>
+Занятость          <input type="text" name='occupation' size='50'>
+Описание           
+<textarea  name='description' rows='10' cols='45'></textarea>
+</pre>
 <div class="btn">
 <input type="submit" value="ADD RECORD">
 </div>
-</pre></form>
+</form>
 	</div>
 _END;
 
-	$query = "SELECT * FROM work_type";
-	$result = $conn->query($query);
-	if(!$result) mysql_fatal_error("Возникла ошибка");
+	$db->make_query("SELECT * FROM vacancy");
+	
+	$rows = $db->rows_count();
 
-	$rows = $result->num_rows;
-
-	echo "<div class='my_block'>";
+	echo "<div class='vac_block'>";
 
 	for($j = 0; $j < $rows; $j++)
 	{
-		$result->data_seek($j);
-		$row = $result->fetch_array(MYSQLI_NUM);
+		$db->result->data_seek($j);
+		$row = $db->result->fetch_array(MYSQLI_NUM);
 
 		echo<<<_END
 		<pre>
-Work_type_id:      $row[0]
-Name:              $row[1]
-Knowledge_area_id: $row[2]
+Название должности $row[4]
+Заработная плата   $row[6]
+Занятость          $row[7]
+Описание           
+<textarea readonly name='description'   cols='45'>$row[5]</textarea>
 		</pre>
 		<form action="db_helper2.php" method="post">
 		<input type="hidden" name="delete" value="yes">
-		<input type="hidden" name="workt_id" value="$row[0]">
+		<input type="hidden" name="vac_id" value="$row[0]">
 		<input type="submit" value="DELETE RECORD">
 		</form>
 _END;
@@ -109,28 +119,119 @@ _END;
 
 	echo "</div>";
 
-	$result->close();
-	$conn->close();
+	$db->db_close();
+?>	
 
-	function get_post($conn, $var)
-	{
-		return $conn->real_escape_string($_POST[$var]);
-	}
+<?php //db_helper2.php
 
-	function mysql_fatal_error($msg)
-	{
-		$msg2 = mysql_error();
-		echo <<<_END
-		К сожалению, завершить запрашиваемую операцию не представилось возможным.
-		Было получено следующее сообщение об ошибке:
-		<p>$msg: $msg2 </p>
-		Пожалуйста нажмите кнопку возврата вашего браузера
-		и повторите попытку. Если проблемы не прекратятся,
-		пожалуйста, <a href= "index.php"> сообщите 
-		о них нашему администратору </a>
-		Спасибо.
-_END;
-	}
+// 	session_start();
+
+// 	$hn = "localhost";
+// 	$db = "academycadres";
+// 	$un = "victor";
+// 	$pw = "MP123";
+
+	
+
+// 	$conn = new mysqli($hn, $un, $pw, $db);
+// 	if($conn->connect_error) mysql_fatal_error("Возникла ошибка");
+
+// /////////////....Удаление элемента..............///////////////
+// 	if (isset($_POST['delete']) && isset($_POST['workt_id']))
+// 	{
+// 		$workt_id = get_post($conn, 'workt_id');
+// 		$query = "DELETE FROM work_type WHERE workt_id='$workt_id'";
+// 		$result = $conn->query($query);
+// 		if (!$result) echo "DELETE failed: $query<br>" .
+// 			$conn->error . "<br><br>";
+// 	}
+// /////////////////////////////////////////////////////////////////
+
+// ///////.........Добавление элемента..............////////////////
+// 	if(!isset($_SESION['v']))
+// 			$_SESION['v'] = 0;
+// 	if (isset($_POST['name']) && isset($_POST['knarea_id']))
+// 	{
+// 		$name = get_post($conn, 'name');
+// 		$knarea_id = get_post($conn, 'knarea_id');
+
+// 		if($_SESION['v'] != $knarea_id)
+// 		{
+// 			$_SESION['v'] = $knarea_id;
+// 		}
+
+
+// 		$query = "INSERT INTO work_type VALUES" . 
+// 			"('NULL' , '$name' , '$knarea_id')";
+// 		$result = $conn->query($query);
+// 		if (!$result) echo "INSERT failed: $query<br>" .
+// 		$conn->error . "<br><br>";
+// 	}
+// 	$v = $_SESION['v'];
+// /////////////////////////////////////////////////////////////////
+// 	echo <<<_END
+// 	<div class="myclass">
+// <form action="db_helper2.php" method="post"><pre>
+// Work_type          <input type="text" name="name" size="50" autofocus="autofocus">
+// knowledge_area_id  <input type="text" name="knarea_id" value="$v" size="50">
+// <div class="btn">
+// <input type="submit" value="ADD RECORD">
+// </div>
+// </pre></form>
+// 	</div>
+// _END;
+
+// 	$query = "SELECT * FROM work_type";
+// 	$result = $conn->query($query);
+// 	if(!$result) mysql_fatal_error("Возникла ошибка");
+
+// 	$rows = $result->num_rows;
+
+// 	echo "<div class='my_block'>";
+
+// 	for($j = 0; $j < $rows; $j++)
+// 	{
+// 		$result->data_seek($j);
+// 		$row = $result->fetch_array(MYSQLI_NUM);
+
+// 		echo<<<_END
+// 		<pre>
+// Work_type_id:      $row[0]
+// Name:              $row[1]
+// Knowledge_area_id: $row[2]
+// 		</pre>
+// 		<form action="db_helper2.php" method="post">
+// 		<input type="hidden" name="delete" value="yes">
+// 		<input type="hidden" name="workt_id" value="$row[0]">
+// 		<input type="submit" value="DELETE RECORD">
+// 		</form>
+// _END;
+// 	}
+
+// 	echo "</div>";
+
+// 	$result->close();
+// 	$conn->close();
+
+// 	function get_post($conn, $var)
+// 	{
+// 		return $conn->real_escape_string($_POST[$var]);
+// 	}
+
+// 	function mysql_fatal_error($msg)
+// 	{
+// 		$msg2 = mysql_error();
+// 		echo <<<_END
+// 		К сожалению, завершить запрашиваемую операцию не представилось возможным.
+// 		Было получено следующее сообщение об ошибке:
+// 		<p>$msg: $msg2 </p>
+// 		Пожалуйста нажмите кнопку возврата вашего браузера
+// 		и повторите попытку. Если проблемы не прекратятся,
+// 		пожалуйста, <a href= "index.php"> сообщите 
+// 		о них нашему администратору </a>
+// 		Спасибо.
+// _END;
+// 	}
 ?>
 
 

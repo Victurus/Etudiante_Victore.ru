@@ -1,5 +1,5 @@
-<?php //worker.php
-	include_once $_SERVER['DOCUMENT_ROOT'] . "/Globals.php";
+<?php //priv_kab_worker.php
+	include_once "Globals.php";
 
 	$db = new db_helper();
 	$db->connect_db();
@@ -20,26 +20,69 @@
 	$img_message = '';
 	$doc_msg = '';
 
+	$login = '';
+	$pass = '';
+	$fio = '';
+	$e_mail = '';
+	$tel_mob = '';
+	$tel_dom = '';
+	$exp = '';
+	$prof = '';
+	$cv_path = '';
+	$img_path = '';
+	$born = '';
+	$knarea_id = '';
 
-	if(!isset($_POST['workt']) &&  !isset($_POST['knarea']))
+	if(!isset($_POST['workt_p']) &&  !isset($_POST['knarea']))
 	{
+
+		$login = $_SESSION['username'];
+
+		$db->make_query("SELECT * FROM users WHERE login='$login'");
+		$db->result->data_seek(0);
+		$row = $db->result->fetch_array(MYSQLI_NUM);
+
+		$_SESSION['usr_id'] = $row[0];
+		$usr_id = $row[0];
+		$pass = $row[2];
+
+		$db->make_query("SELECT * FROM workers WHERE usr_id=$usr_id");
+		$db->result->data_seek(0);
+		$row = $db->result->fetch_array(MYSQLI_NUM);
+
+		$knarea_id = $row[10];
+		$_SESSION['workt_id'] = $row[11];
+
+		$_SESSION['fio'] = $row[1];
+		$fio = $row[1];
+		$e_mail = $row[2];
+		$tel_mob = $row[3];
+		$tel_dom = $row[4];
+		$exp = $row[5];
+		$prof = $row[6];
+		$_SESSION['cv_path'] = $row[7];
+		$_SESSION['img_path'] = $row[8];
+		$born = $row[9];
+
 		$db->make_query("SELECT * FROM knowledge_area");
 		$selector  = "<div class='text'>Выберите вашу область знания:</div>";
-		$selector .= "<select name='knarea' size='1' onchange='send_get(this.options[this.selectedIndex].value)'>";
-		$selector .= "<option value='1000'></option>";
-
+		$selector .= " <select name='knarea' size='1' onchange='send_get(this.options[this.selectedIndex].value)'>";
+		
 		for($i = 0; $i < $db->rows_count(); $i++)
 		{
 			$db->result->data_seek($i);
 			$row = $db->result->fetch_array(MYSQLI_NUM);
 
-			$selector .= "<option value='$row[0]'> $row[1]</option>";
+			if($i == $knarea_id - 1)
+				$selector .= "<option selected='selected' value='$row[0]'> $row[1]</option>";
+			else	
+				$selector .= "<option value='$row[0]'> $row[1]</option>";
 		}
 
 		$selector .= "</select>";
 		$db->db_close();
 	}
-	else 
+	else
 	{
 		$workt = sanitizeString($_POST['workt']);
 		$knarea = sanitizeString($_POST['knarea']);
@@ -56,7 +99,7 @@
 
 		$db->db_close();
 
-		$selector = "<div class='lines text'> Ваша область знания:  $knarea_text </div>";
+		$selector = "<div class='lines text'> Ваша область знания имеет номер:  $knarea_text </div>";
 		$selector .= "<div class='lines text'>Ваш тип работ:                    $workt_text  </div> ";
 
 		$new_worker = new worker();
@@ -127,8 +170,10 @@
 															if($ext)
 															{
 																$now = time();
-																$n = "users/workers/$now.$ext";
-																$new_worker->set_imgpath($n);
+																unlink('reg/' . $_SESSION['img_path']);
+																$n = "reg/users/workers/$now.$ext";
+
+																$new_worker->set_imgpath("users/workers/$now.$ext");
 																move_uploaded_file($_FILES['image_avatar']['tmp_name'], $n);
 																$img_message = "Вот ваша аватарка '$name':<br>";
 																$img_message .= "<img src= '$n' >";
@@ -148,14 +193,14 @@
 																if($ext)
 																{
 																	$now = time();
-																	$dir = "users/workers/CV/$now.$ext";
-																	$new_worker->set_docpath($dir);
+																	unlink('reg/' . $_SESSION['cv_path']);
+																	$dir = "reg/users/workers/CV/$now.$ext";
+																	
 																	move_uploaded_file($_FILES['curvitae']['tmp_name'], $dir);
-
-																	$login_msg = $new_worker->save_worker($knarea, $workt);
-																	// session_start();
+																	$new_worker->set_docpath("users/workers/CV/$now.$ext");
+																	$login_msg = $new_worker->update_worker($knarea, $workt, $_SESSION['usr_id']);
+																	
 																	$_SESSION['username'] = sanitizeString($_POST['login']);
-																	$_SESSION['who'] = 0;
 																}		
 																else
 																{
@@ -233,79 +278,147 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Регистрация соискателя</title>
-<link rel="stylesheet" href="/styles/registration.css">
-<script src="JS/functions.js"></script>
+<title>Личный кабинет соискателя</title>
+<link rel="stylesheet" href="/styles/priv_cab.css">
+<script src="reg/JS/functions.js"></script>
 </head>
 <body>
-	<div class="main">
+	<div class="main_reg_wrk">
 		<div class="header">
-			<h2>Регистрация</h2>
+			<h2><?php echo "Кабинет пользователя " . $_SESSION['fio']; ?></h2>
 			<h3>Заполните пожалуйста все поля</h3>
-			<h4><?php if($login_msg) echo "Регистрация" . $login_msg; ?></h4>
+			<h4><?php if($login_msg) echo "Операция обновления" . $login_msg; ?></h4>
 		</div>
 
 		<div class="reg-block">
-			<form method="post" action="worker_reg.php" enctype= 'multipart/form-data'>
+			<form method="post" action="priv_kab_worker.php" enctype= 'multipart/form-data'>
 			<?php 
 				echo "<div class='lines' id='knarea_p'>" . $selector . "</div>";
 
-				echo "<div class='lines' id='workt_p'></div>";
+				echo "<div class='lines' id='workt_p'>";
+				if($knarea_id != '')
+					if($knarea_id != 1000)
+					{	
+						echo "<div class='text'>Выберите ваш тип работ:</div> ";
+
+						$db = new db_helper();
+						$db->connect_db();
+
+						$db->make_query("SELECT * FROM work_type WHERE knarea_id='$knarea_id'");
+
+						echo "<select name='workt' size='1'>";
+						echo "<option value='1000'></option>";
+
+						$rule = 1000;
+						if(isset($_SESSION['workt_id']))
+						{
+							$rule = $_SESSION['workt_id'];
+						}
+
+						for($i = 0; $i < $db->rows_count(); $i++)
+						{
+							$db->result->data_seek($i);
+							$row = $db->result->fetch_array();
+							if($row[0] == $rule)
+								echo "<option selected='selected' value='$row[0]'> $row[1]</option>";
+							else
+								echo "<option value='$row[0]'> $row[1]</option>";
+						}
+					echo "</select>";
+				}
+				echo "</div>";
 			?>
 			<div class="lines">
-			   <div class="text">Придумайте логин:</div> <input type="text" name="login" size="43">
+			   <div class="text">Придумайте логин:<?php echo $login_msg; ?></div> <input type="text" name="login" <?php echo "value='$login'";?> size="43">
 			</div>
 
 			<div class="lines"> 
-				<div class="text">Придумайте пароль:</div> <input type="password" name="pass1" size="43"> 
+				<div class="text">Придумайте пароль:</div> <input type="text" name="pass1" <?php echo "value='$pass'";?> size="43"> 
 			</div>
 
 			<div class="lines"> 
-				<div class="text">Повторите пароль:<?php echo $pass_msg; ?></div> <input type="password" name="pass2" size="43"> 
+				<div class="text">Повторите пароль:<?php echo $pass_msg; ?></div> <input type="text" name="pass2" <?php echo "value='$pass'";?> size="43"> 
 			</div>
 
 			<div class="lines"> 
-				<div class="text">Ваше Фио (в именительном падеже):<?php echo $name_msg; ?></div> <input type="text" name="fio" size="43"> 
+				<div class="text">Ваше Фио (в именительном падеже):<?php echo $name_msg; ?></div> <input type="text" name="fio" <?php echo "value='$fio'";?> size="43"> 
 			</div>
 
 			<div class="lines"> 
-				<div class="text">Введите ваш e-mail:<?php echo $e_mail_msg; ?></div> <input type="text" name="e_mail" size="43"> 
+				<div class="text">Введите ваш e-mail:<?php echo $e_mail_msg; ?></div> <input type="text" name="e_mail" <?php echo "value='$e_mail'";?> size="43"> 
 			</div>
 
 			<div class="lines"> 
-				<div class="text">Номер сотового:<?php echo $tel_mob_msg; ?></div> <input type="text" name="tel_mob" size="43"> 
+				<div class="text">Номер сотового:<?php echo $tel_mob_msg; ?></div> <input type="text" name="tel_mob" <?php echo "value='$tel_mob'";?> size="43"> 
 			</div>
 
 			<div class="lines"> 
-				<div class="text">Домашний номер:<?php echo $tel_dom_msg; ?></div> <input type="text" name="tel_dom" size="43"> 
+				<div class="text">Домашний номер:<?php echo $tel_dom_msg; ?></div> <input type="text" name="tel_dom" <?php echo "value='$tel_dom'";?> size="43"> 
 			</div>
 
 			<div class="lines"> 
-				<div class="text">Опыт работы:<?php echo $experience_msg; ?></div> <input type="text" name="experience" size="43"> 
+				<div class="text">Опыт работы:<?php echo $experience_msg; ?></div> <input type="text" name="experience" <?php echo "value='$exp'";?> size="43"> 
 			</div>
 
 			<div class="lines"> 
-				<div class="text">Наименование профессии:<?php echo $profession_msg; ?></div> <input type="text" name="profession" size="43"> 
+				<div class="text">Наименование профессии:<?php echo $profession_msg; ?></div> <input type="text"  name="profession" <?php echo "value='$prof'";?> size="43"> 
 			</div>
 
 			<div class="lines"> 
 				<div class="text">Укажите вашу дату рождения:<?php echo $year_msg . ' ' . $month_msg . ' ' . $date_msg; ?></div> 
 				
 				<?php
+					if($fio != '')
+					{
+						$fulldate = substr($born, 0, 10);
+						$year_ = substr($fulldate, 0, 4);
+						$month = substr($fulldate, 5, 2);
+						$real_date = substr($fulldate, 8 , 2);
+
+						settype($year_, 'int');
+						settype($month, 'int');
+						settype($real_date, 'int');
+					}
+					else
+						$month = 'this.options[this.selectedIndex].value';
+
 					echo "<select name='year' size='1'>";
-					echo "<option value='0'></option>";
-					for($i = 1990;$i < 2017; $i++ )
-						echo "<option value='$i'>$i</option>";
-					echo "</select>";
-	
-	
-					echo "<select name='month' size='1' onchange='set_day(this.options[this.selectedIndex].value)'>";
-					echo "<option value='0'></option>";
-						for($i = 1; $i < 13; $i++)
+					for($i = 1990;$i < 2017; $i++)
+						if($i == $year_)
+							echo "<option selected='selected' value='$i'>$i</option>";
+						else
 							echo "<option value='$i'>$i</option>";
 					echo "</select>";
-					echo "<span id='selector_date'> </span>";
 
+					echo "<select name='month' size='1' onchange='set_day($month)'>";
+						for($i = 1; $i < 13; $i++)
+							if($i == $month)
+								echo "<option selected='selected' value='$i'>$i</option>";
+							else
+								echo "<option value='$i'>$i</option>";
+					echo "</select>";
+
+
+					echo "<span id='selector_date'>";
+					if($fio != '')
+					{
+						$count = 31;
+						if ($month == 2)
+							$count = 29;
+						else 
+							if($month == 4 || $month == 6 || $month == 9 || $month == 11)
+								$count = 30;
+
+						
+						echo "<select name='date' size='1'>";
+							for($i = 1; $i < $count; $i++)
+								if($i == $real_date)
+									echo "<option selected='selected' value='$i'>$i</option>";
+								else
+									echo "<option value='$i'>$i</option>";
+						echo "</select>";
+					}
+					echo "</span>";
 				?>
 
 			</div>
@@ -316,12 +429,13 @@
 
 			<div class="lines">
 				<div class="text">Загрузите аватарку с расширением JPG, GIF, PNG или TIF:<?php echo $img_message; ?></div>
-				<input type= 'file' name= 'image_avatar' >  
+				<input type= 'file' name= 'image_avatar'>  
 
-				<input type= 'submit' value= 'Зарегестрироваться'>
+				<div class='button_sub'><input type= 'submit' value= 'Обновить информацию'></div>
 			</div>
 			</form>
-			<input type="button" name="back" value="На главную" onclick="location.href='../index.php'">
+			<input type="button" name="back" value="На главную" onclick="location.href='index.php'">
+
 		</div>
 	</div>
 </body>

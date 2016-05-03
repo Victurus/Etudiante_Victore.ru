@@ -10,6 +10,7 @@ body
 	color:#333333;
   	font-family:Arial, Helvetica, sans-serif;
   	font-size:14px;
+  	overflow-x: hidden; 
 }
 
 a
@@ -227,6 +228,28 @@ a
 	margin-left:4px;	
 }
 
+.right .form .en_prkab
+{
+	margin:0;
+	padding:0;
+	width:100%;
+}
+
+.right .form .en_prkab a
+{
+	display:block;
+	background-color: white;
+	border:2px outset grey;
+	text-align: center;
+	margin-top: 10px;
+	padding:30px 0 30px 0;
+}
+
+.right .form .en_prkab a:hover
+{
+	background-color: lightblue;
+}
+
 .right #wlcm
 {
 	margin-left: 10px;
@@ -236,28 +259,6 @@ a
 {
 	width:100%;
 	display:flex;
-}	
-
-.worker_block
-{
-	display:flex;
-	background: #7FFFD4; /* Цвет фона */
-	width: 100%;
-	border: 5px inset #8A2BE2;
-	padding: 10px 20px;
-    margin: 10px 20px; /* Отступы верх-низ и по бокам*/
-}
-
-.worker_block img
-{
-	display: flex;
-}
-
-.worker_block .worker_info
-{
-	display: flex;
-	font-size: 20px;
-	padding-left: 10px;
 }
 
 .footer

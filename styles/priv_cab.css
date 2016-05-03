@@ -1,0 +1,91 @@
+/*priv_cab.css*/
+
+body
+{
+	margin:0;
+	padding:0;
+	font-size: 10pt;
+	font-family: sans-serif, Helvetica, Arial;
+}
+
+.main
+{
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.main_reg
+{
+	margin: 10px 10px 20px 30px;
+	display:flex;
+	flex-flow: column wrap;
+	width:686px;
+}
+
+.main_reg .reg-block
+{
+	display: flex;
+	background-color: lightblue;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 10px;
+	height:446px;
+}
+
+.main_reg .reg-block .button_sub input
+{
+	height:100px;
+	width:100%;
+}
+
+.main_reg .reg-block .lines
+{
+	margin:5px;
+}
+
+ .main .vac_editor
+{
+
+	display: flex;
+	flex-flow: column;
+	margin: 30px 10px 20px 30px;
+}
+
+ .main .vac_editor .vac_block
+{
+	padding-left: 5px;
+	border: 3px solid darkblue;
+	height:200px;
+	overflow-y:scroll;
+}
+
+.main_reg_wrk
+{
+	margin: 10px 10px 20px 30px;
+	display:flex;
+	flex-flow: column wrap;
+	width:600px;
+}
+
+.main_reg_wrk .reg-block
+{
+	display: flex;
+	background-color: lightblue;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 10px;
+	height:782px;
+}
+
+.main_reg_wrk .reg-block .button_sub input
+{
+	height:100px;
+	width:100%;
+}
+
+.main_reg_wrk .reg-block .lines
+{
+	margin:5px;
+}

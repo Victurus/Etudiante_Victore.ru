@@ -9,6 +9,9 @@
 	if(!isset($_SESSION['i']))
 	{
 		$_SESSION['i'] = '0';
+		unset($_SESSION['query']);
+ 		unset($_SESSION['chosen']);
+ 		unset($_SESSION['condition']);
 	}
 
 	if (isset($_POST['sumbitted']))
@@ -31,13 +34,13 @@
  				$_SESSION['query'] = "SELECT * FROM work_type WHERE workt_id='$choice'";
  				$button_for = "<input type='button' value='Назад' onclick='location.href=\"for_emp.php\"' >";
  				$_SESSION['condition'] .= " AND workt_id='$choice'";
- 				session_destroy();
+ 				unset($_SESSION['i']);
  				break;
  			default:
  				$chosen = 'Выбирайте';
 				$choice='';
  				$button_for = "<input type='submit' value='Далее'>";
- 				session_destroy();
+ 				unset($_SESSION['i']);
  				break;
  		}
  	}
@@ -115,9 +118,30 @@ _END;
 
 	<div class="right-part">
 	<?php
+		if(isset($_POST['workrid']))
+		{
+			$worker_id = $_POST['workrid'];
+			// echo $vac_id;
+			$usr_id = $_SESSION['id'];
+			// echo '/'. $usr_id;
+
+			$db = new db_helper();
+			$db->connect_db();
+
+			$db->make_query("SELECT * FROM employers WHERE usr_id = '$usr_id' ");
+			$db->result->data_seek(0);
+
+			$row = $db->result->fetch_array(MYSQLI_NUM);
+			$db->make_query("INSERT INTO otclick_employer VALUES('NULL', '$row[0]', '$worker_id') ");
+			// $db->db_close();
+		}
+
 		$new_worker = new worker();
-		echo $new_worker->workers_list($condition);
-		echo $choice;
+		if(isset($_SESSION['username']) && isset($_SESSION['who']))
+			echo $new_worker->workers_list($_SESSION['who'], $condition);
+		else
+			echo $new_worker->workers_list(0, $condition);
+		// echo $choice;
 	?>
 
 	</div>

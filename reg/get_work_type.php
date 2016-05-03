@@ -15,6 +15,7 @@
 
 			echo "<select name='workt' size='1'>";
 			echo "<option value='1000'></option>";
+
 			for($i = 0; $i < $db->rows_count(); $i++)
 			{
 				$db->result->data_seek($i);

@@ -1,31 +1,5 @@
 <?php
 	include_once "header.php";
-
-	$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-	$_SESSION['ua'] = $_SERVER['HTTP_USER_AGENT'];
-	$_SESSION['username'] = 'none';
-	
-	$msg = '';
-
-	if(isset($_POST['login']))
-	{
-		$login = sanitizeMySQL($db->db_conn, $_POST['login']);
-
-		if(isset($_POST['pass']))
-		{
-			$password = sanitizeMySQL($db->db_conn, $_POST['pass']);
-			$db->make_query("SELECT * FROM users WHERE login='$login' AND pass='$password'");
-			if($db->rows_count() == 0)
-			{
-				$msg = 'Такого пользователя не существует';
-			}
-			else
-			{
-				$row = $db->result->fetch_array(MYSQLI_NUM);
-				$_SESSION['username'] = $row[1];
-			}
-		}
-	}
 ?>
 <div class= 'flex-container'>
 	<div class="lr_item left">
@@ -39,29 +13,67 @@
 	</div>
 
 	<div class="lr_item right">
-		<div class="form">
-		Авторизация: <span id='authentication_msg'><?php echo $msg; ?>  </span>
-			<form method='post'action= 'index.php' enctype= 'text/plain'>
-				<div class="logpass">
-					<div class="login">
-						Логин:
-						<div class="input_log">
-							<input type= 'text' name= 'login' size='15' placeholder="Введите логин"> <br>
-						</div>
-					</div>
 
-					<div class="pass">
-						Пароль:
-						<div class="input_pass">
-							<input type= 'password' name= 'pass' size='15' placeholder="Введите пароль"> <br>
-						</div>
+		<?php
+			if(!isAuth())
+			{
+				$msg = $_SESSION['msg'];
+			echo <<<_END
+	<div class="form">
+		Авторизация: <span id='authentication_msg'> $msg  </span>
+
+		<form method='post' action= 'index.php'>
+			<div class="logpass">
+
+				<div class="login">
+					Логин:
+					<div class="input_log">
+						<input type='text' name='login' size='15' placeholder="Введите логин"> <br>
 					</div>
 				</div>
-					<input type="hidden" name="submitted" value="yes">
-					<input type= 'submit' value= 'Войти' autofocus="autofocus">
-					<input type= 'button' value= 'Зарегестрироваться' onclick="location.href='registration.php'">
+
+				<div class="pass">
+					Пароль:
+					<div class="input_pass">
+						<input type='password' name='pass' size='15' placeholder="Введите пароль"> <br>
+					</div>
+				</div>
+			</div>
+				<input type= 'submit' value= 'Войти' autofocus="autofocus">
+				<input type= 'button' value= 'Зарегестрироваться' onclick="location.href='registration.php'">
+		</form>
+	</div>
+_END;
+			}
+			else
+			{
+				if($_SESSION['who'])
+				{
+					$link = "<a href='priv_kab_employer.php'>Войти в личный кабинет</a>";
+				}
+				else
+					$link = "<a href='priv_kab_worker.php'>Войти в личный кабинет</a>";
+
+				$username = $_SESSION['username'];
+				echo <<<_REG
+		<div class="form">
+			<form method='post' action='index.php'>
+				Приветствую: $username <br>
+				<input type="hidden" name="submitted" value="yes">
+				<input type="submit" name="out" value="Выйти">
 			</form>
+
+			<div class='en_prkab'>
+				$link
+			</div>
 		</div>
+		
+_REG;
+			}
+
+		?>
+
+
 	</div>
 </div>
 <?php include_once "footer.php";?>

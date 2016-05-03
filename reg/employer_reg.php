@@ -1,6 +1,7 @@
 <?php //employer.php
 	include_once $_SERVER['DOCUMENT_ROOT'] . "/Globals.php";
 
+	$log_msg = '';
 	$login_msg = '';
 	$img_message = '';
 	$org_name_msg = '';
@@ -8,19 +9,16 @@
 	$e_mail_msg = '';
 	$tel_msg = '';
 
-	//$db = new db_helper();
-	//$db->connect_db();
-
 	$new_emp = new employer();
 
-	if(isset($_POST['login']))
+	if(isset($_POST['login']) &&  $_POST['login'] != '')
 	{
 		$new_emp->set_login( sanitizeString($_POST['login']));
-		if(isset($_POST['org_name']))
+		if(isset($_POST['org_name']) && $_POST['org_name'] != '')
 		{
 			$new_emp->set_name( sanitizeString($_POST['org_name']));
 
-			if(isset($_POST['pass1']) && isset($_POST['pass2']))
+			if(isset($_POST['pass1']) && isset($_POST['pass2']) && $_POST['pass1'] != ''  && $_POST['pass2'] != '')
 			{
 				$pass1 = sanitizeString($_POST['pass1']);
 				$pass2 = sanitizeString($_POST['pass2']);
@@ -29,11 +27,11 @@
 				{
 					$new_emp->set_password($pass1);
 
-					if(isset($_POST['e_mail']))
+					if(isset($_POST['e_mail']) && $_POST['e_mail'] != '')
 					{
 						$new_emp->set_email( sanitizeString($_POST['e_mail']));
 
-						if(isset($_POST['tel']))
+						if(isset($_POST['tel']) && $_POST['tel'] != '')
 						{
 							$new_emp->set_teldom( sanitizeString($_POST['tel']));
 
@@ -58,10 +56,11 @@
 									$new_emp->set_path($n);
 									move_uploaded_file($_FILES['filename']['tmp_name'], $n);
 									$img_message = "Вот ваша аватарка '$name':<br>";
-									$img_message .= "<img src= '$n' >";
+									$img_message .= "<img src= '$n' width='auto' height='200'>";
 
-									$login_msg = $new_emp->save_employer();
-									
+									$log_msg = $new_emp->save_employer();
+									$_SESSION['username'] = sanitizeString($_POST['login']);
+									$_SESSION['who'] = 1;
 								}
 								else
 									$img_message = "'$name' - неприемлимый файл изображения";
@@ -111,21 +110,35 @@
 		<div class="header">
 			<h2>Регистрация</h2>
 			<h3>Заполните пожалуйста все поля</h3>
+			<h4><?php if($log_msg) echo "Регистрация" . $log_msg; ?></h4>
 		</div>
 		
 		<div class="reg-block">
-			<pre>
-				<form action="employer_reg.php" method="post" enctype= 'multipart/form-data'>
-Придумайте логин                 <input type="text"     name="login"    size="20"> <?php echo $login_msg;    ?>  
-Придумайте пароль                <input type="password" name="pass1"    size="20">
-Повторите пароль                 <input type="password" name="pass2"    size="20"> <?php echo $pass_msg;     ?>  
-Название вашей организации       <input type="text"     name="org_name" size="20"> <?php echo $org_name_msg; ?>     
-Введите e_mail                   <input type="text"     name="e_mail"   size="20"> <?php echo $e_mail_msg;   ?>  
-Введите основной телефон         <input type="text"     name="tel"      size="20"> <?php echo $tel_msg;      ?>  
-Загрузите аватарку с расширением JPG, GIF, PNG или TIF:
-<input type= 'file' name= 'filename' size= '10'>  <input type= 'submit' value= 'Загрегестрироваться'> <?php echo $img_message; ?>
-				</form>
-			</pre>
+			<form action="employer_reg.php" method="post" enctype= 'multipart/form-data'>
+				<div class="lines">
+					<div class="text">Придумайте логин</div> <input type="text"     name="login"    size="20"> <?php  echo $login_msg; ?>  
+				</div>
+				<div class="lines">
+					<div class="text">Придумайте пароль</div> <input type="password" name="pass1"    size="20">
+				</div>
+				<div class="lines">
+					<div class="text">Повторите пароль</div> <input type="password" name="pass2"    size="20"> <?php echo $pass_msg;     ?>  
+				</div>
+				<div class="lines">
+					<div class="text">Название вашей организации</div> <input type="text"     name="org_name" size="20"> <?php echo $org_name_msg; ?>     
+				</div>
+				<div class="lines">
+					<div class="text">Введите e_mail</div> <input type="text"     name="e_mail"   size="20"> <?php echo $e_mail_msg;   ?>  
+				</div>
+				<div class="lines">
+					<div class="text">Введите основной телефон</div> <input type="text"     name="tel"      size="20"> <?php echo $tel_msg;      ?>  
+				</div>
+				<div class="lines">
+					<div class="text">Загрузите аватарку с расширением JPG, GIF, PNG или TIF:</div> <input type= 'file' name= 'filename' size= '10'> 
+				</div> 
+<input type= 'submit' value= 'Загрегестрироваться'> <?php echo $img_message; ?>
+			</form>
+			<input type="button" name="back" value="На главную" onclick="location.href='../index.php'">
 		</div>
 	</div>
 </body>

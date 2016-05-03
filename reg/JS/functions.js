@@ -1,10 +1,9 @@
-
 	function send_get(kn_area_id)
 	{
 		params = "knarea_id=" + kn_area_id
 		request = new ajaxRequest()
 
-		request.open("POST", "get_work_type.php", true)
+		request.open("POST", "../reg/get_work_type.php", true)
 
 		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 		request.setRequestHeader("Content-length", params.length)
@@ -56,6 +55,8 @@
 			return request
 		}
 	}
+
+	
 
 	function set_day(month)
 	{

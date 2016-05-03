@@ -9,9 +9,13 @@
 .main-cont .left-part
 {
 	width:30%;
-	margin:10px 5px 7px 5px;
+/*	margin-top: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+*/	margin:10px 5px 7px 5px;
 	background-color: #0558AB;
 	border: 4px outset #039DDF;
+	height:512px;
 }
 
 .main-cont .left-part .fscroll
@@ -89,3 +93,33 @@
 	width:100%;
 }
 
+.main-cont .right-part
+{
+	margin: 0px 0px 7px 5px;
+	padding:0;
+	width:68%;
+}
+
+.main-cont .right-part .worker_block
+{
+	display:flex;
+	background: #7FFFD4; /* Цвет фона */
+	width: auto;
+	border: 5px inset #8A2BE2;
+	padding: 10px 20px;
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-left: 5px;
+}
+
+.main-cont .right-part .worker_block img
+{
+	display: flex;
+}
+
+.main-cont .right-part .worker_block .worker_info
+{
+	display: flex;
+	font-size: 20px;
+	padding-left: 10px;
+}

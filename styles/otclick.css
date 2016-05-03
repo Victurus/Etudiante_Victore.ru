@@ -1,0 +1,20 @@
+/*otclick.css*/
+
+.main_otcl
+{
+	/*верх право низ лево*/
+	margin:10px 200px 5px 100px;
+	font-size: 20pt;
+	display: flex; /* Флексы */
+    flex-flow: column wrap; /* Располагаем в виде колонок */
+}
+
+.main_otcl .otclick_block
+{
+	display:flex;
+	background: #7FFFD4; /* Цвет фона */
+	width: 100%;
+	border: 5px inset #8A2BE2;
+	padding: 10px 20px;
+    margin: 10px 20px; /* Отступы верх-низ и по бокам*/
+}

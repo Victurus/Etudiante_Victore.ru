@@ -26,17 +26,26 @@
 
 			if(!$this->db->rows_count())
 			{
-				$this->db->make_query("INSERT INTO users VALUES('NULL' , '$this->login' , '$this->password')");
+				$this->db->make_query("INSERT INTO users VALUES('NULL' , '$this->login' , '$this->password', '1')");
 				$this->db->make_query("SELECT * FROM users WHERE login='$this->login'");
 				$row = $this->db->result->fetch_array(MYSQLI_NUM);
 
 				$this->db->make_query("INSERT INTO employers VALUES ('NULL' , '$this->name' , '$this->path' , '$this->tel_dom' , '$this->e_mail' , '$row[0]')");
-				return "Регистрация прошла упешно";
+				return " прошла упешно";
 			}
 			else
 			{
 				return "Пользователь с таким именем уже существует, придумайте другое";
 			}
+		}
+
+		function update_employer($usr_id)
+		{
+			$this->db->make_query("UPDATE users SET login='$this->login', pass='$this->password' WHERE usr_id='$usr_id'");
+
+			$this->db->make_query("UPDATE employers SET organization_name='$this->name', logo_path='$this->path', tel_org='$this->tel_dom', e_mail='$this->e_mail' WHERE usr_id='$usr_id'");
+
+			return " прошла упешно";
 		}
 
 		function employers_list($condition) // Выдаёт список работодателей
@@ -63,12 +72,11 @@ _EOT;
 
 						<div class="emp_info"> 
 							<br>    
-							Название фирмы:    $row[1]    <br>
+							Название фирмы:    $row[1]  <br>
 								
 							Почта:             $row[4]  <br>
 								
-							Телефон оффиса:    $row[3] <br>
-								
+							Телефон оффиса:    $row[3]  <br>
 						</div>
 					</div>			
 _END;

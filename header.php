@@ -1,10 +1,51 @@
-<?php 
+<?php
+	session_start();
 	include_once "Globals.php";
 
 	$db = new db_helper();
 	$db->connect_db();
-	
-	session_start();
+
+	if(isset($_POST['submitted']))
+	{
+		out();
+	}
+
+	if(!isAuth())
+	{
+		$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+		$_SESSION['ua'] = $_SERVER['HTTP_USER_AGENT'];
+
+		$_SESSION['msg'] = 'не пройдена';
+		$_SESSION['up_msg'] = "Пройдите регистрацию в форме на главной";	
+
+		if(isset($_POST['login']))
+		{
+			$login = sanitizeMySQL($db->db_conn, $_POST['login']);
+
+			if(isset($_POST['pass']))
+			{
+				$password = sanitizeMySQL($db->db_conn, $_POST['pass']);
+				$db->make_query("SELECT * FROM users WHERE login='$login' AND pass='$password'");
+				if($db->rows_count() == 0)
+				{
+					$_SESSION['msg'] = 'Неправильно введён логин-пароль';
+				}
+				else
+				{
+					$row = $db->result->fetch_array(MYSQLI_NUM);
+					$_SESSION['id'] = $row[0];
+					$_SESSION['username'] = $row[1];
+					$_SESSION['who'] = $row[3];
+					$_SESSION['msg'] = "пройдена";
+					$_SESSION['up_msg'] = "Вы зашли под именем  " . $_SESSION['username']; 
+				}
+			}
+		}
+	}
+	else
+	{
+		$_SESSION['up_msg'] = "Вы зашли под именем  " . $_SESSION['username']; 
+	}
 
 ?>
 <!DOCTYPE html>
@@ -14,6 +55,8 @@
 <title><?php echo $title; ?></title>
 <link rel="stylesheet" href="/styles/menu.css">
 <link rel="stylesheet" href="/styles/femployer.css">
+<link rel="stylesheet" href="/styles/fworker.css">
+<link rel="stylesheet" href="/styles/otclick.css">
 </head>
 <body>
 	<div class="header">
@@ -37,15 +80,14 @@
 			<li><a href="for_emp.php">     Работодателю          </a></li>
 			<li><a href="for_worker.php">  Соискателю            </a></li>
 			<li><a href="Information.php"> Информация            </a></li>
-			<li><a href="Partners.php">    С кем мы сотрудничаем </a></li>		
+			<?php 
+				if(isset($_SESSION['username']))
+				echo "<li><a href='otclick.php'> Кто откликнулся</a></li>"; 
+			?>		
 			
 				<div class="user_name">
 					<?php 
-						if(isset($_SESSION['username']))
-							if($_SESSION['username'] != 'none')
-								echo "Вы зашли под именем" . $_SESSION['username']; 
-							else
-								echo "Пройдите регистрацию в форме на главной"
+						echo $_SESSION['up_msg'];	
 					?>
 				</div>	
 			

@@ -1,0 +1,32 @@
+/*fworker.css*/
+
+.main-cont .right-part
+{
+	margin: 0px 0px 7px 5px;
+	padding:0;
+	width:68%;
+}
+
+.main-cont .right-part .vac_block
+{
+	display:flex;
+	background: #7FFFD4; /* Цвет фона */
+	width: auto;
+	border: 5px inset #8A2BE2;
+	padding: 10px 20px;
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-left: 5px;
+}
+
+.main-cont .right-part .vac_block img
+{
+	display: flex;
+}
+
+.main-cont .right-part .vac_block .vac_info
+{
+	display: flex;
+	font-size: 20px;
+	padding-left: 10px;
+}
