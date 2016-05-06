@@ -29,6 +29,7 @@
 		///...Это область создания и сохранения логов.....//////////////////////////////////////
 			$t = date("Y:m");
 			$logs = fopen("/home/victor/Data/sites/Etudiante_Victore.ru/logs/log_$t.txt", "a") or die("Усё сервак накрылся, музыки не будет");
+			chmod("/home/victor/Data/sites/Etudiante_Victore.ru/logs/log_$t.txt", 0755);
 			$ec_t = date("Y:m:d - H:i:s");
 			$text = <<<_END
 	[$ec_t] $this->name зарегистрирован. Под логином $this->login \n

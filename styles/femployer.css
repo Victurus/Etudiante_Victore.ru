@@ -9,13 +9,10 @@
 .main-cont .left-part
 {
 	width:30%;
-/*	margin-top: 10px;
-	margin-left: 5px;
-	margin-right: 5px;
-*/	margin:10px 5px 7px 5px;
+	margin:10px 5px 7px 5px;
 	background-color: #0558AB;
 	border: 4px outset #039DDF;
-	height:512px;
+	height:501px;
 }
 
 .main-cont .left-part .fscroll
@@ -29,7 +26,7 @@
 .main-cont .left-part .filter-name
 {
 	padding-left: 5px;
-	font-size: 25pt;
+	font-size: 25px;
 	background-color: #7D46B5;
 	border-bottom: 2px solid black;
 }

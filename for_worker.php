@@ -64,7 +64,7 @@
 <div class='main-cont'>
 	<div class='left-part'>
 		<div class="filter-name">
-			Фильтр: <?php echo $chosen; ?>
+			<?php echo "Поиск"; ?>
 		</div>
 
 		<div class="but-choose">

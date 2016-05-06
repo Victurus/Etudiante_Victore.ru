@@ -2,6 +2,15 @@
 	
 	include_once "header.php";
 ?>
+
+<style type="text/css">
+	.footer
+	{
+		position:fixed;
+		bottom:0px;
+	}
+</style>
+
 <div class='main_otcl'>
 	<?php
 		if($_SESSION['who'])
