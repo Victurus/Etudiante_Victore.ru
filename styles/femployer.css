@@ -9,19 +9,15 @@
 .main-cont .left-part
 {
 	width:30%;
-/*	margin-top: 10px;
-	margin-left: 5px;
-	margin-right: 5px;
-*/	margin:10px 5px 7px 5px;
+	margin:10px 5px 7px 5px;
 	background-color: #0558AB;
 	border: 4px outset #039DDF;
-	height:512px;
+	height:501px;
 }
 
 .main-cont .left-part .fscroll
 {
 	height:470px;
-	width: 95%;
 	overflow-y:scroll;
 	overflow-x:hidden;
 }
@@ -29,7 +25,7 @@
 .main-cont .left-part .filter-name
 {
 	padding-left: 5px;
-	font-size: 25pt;
+	font-size: 25px;
 	background-color: #7D46B5;
 	border-bottom: 2px solid black;
 }
@@ -39,7 +35,7 @@
 	margin:0;
 	padding:0;
 	background-color: #0558AB;
-	width:auto;
+	
 }
 
 .main-cont .left-part ul li
@@ -47,12 +43,34 @@
 	list-style: none;
 	padding:0;
 	margin-bottom: 1px;
+	width: 100%;
+}
+.main-cont .left-part ul li label .element_list
+{
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.main-cont .left-part ul li label .lft
+{
+	width:70%;
+}
+
+.main-cont .left-part ul li label .rt 
+{
+	width:30%;
+	height: 0.5in;
+}
+
+.main-cont .left-part ul li label .rt input
+{
+	height:100%;
+	width:100%;
 }
 
 .main-cont .left-part ul li label
 {
 	display:block;
-	width:auto;
 	height: 0.5in;
 	padding:8px 10px;
 	margin:0 1px 0 0;
@@ -61,18 +79,12 @@
 
 .main-cont .left-part ul li label:hover
 {
-	background-color: lightblue;
+	background-color: #C2F5EE;
 }
 
-.main-cont .left-part ul li div
+.main-cont .left-part ul li label:active
 {
-	float:left;
-	width:80%;
-}
-
-.main-cont .left-part ul input
-{
-	float:right;
+	background-color: lightblue;	
 }
 
 .main-cont .left-part .but-choose form
@@ -80,7 +92,7 @@
 	display: flex;
 	flex-direction: row;
 }
-
+/*///////////////////////////////////////////////*/
 .main-cont .left-part .button-next
 {
 	background-color: grey;
@@ -92,7 +104,7 @@
 	height:100%;
 	width:100%;
 }
-
+/*////////////////////////////////////////////////*/
 .main-cont .right-part
 {
 	margin: 0px 0px 7px 5px;

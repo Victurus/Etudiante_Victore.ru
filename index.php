@@ -40,7 +40,7 @@
 				</div>
 			</div>
 				<input type= 'submit' value= 'Войти' autofocus="autofocus">
-				<input type= 'button' value= 'Зарегестрироваться' onclick="location.href='registration.php'">
+				<input type= 'button' value= 'Зарегистрироваться' onclick="location.href='registration.php'">
 		</form>
 	</div>
 _END;

@@ -19,11 +19,16 @@
 		$_SESSION['up_msg'] = "Пройдите регистрацию в форме на главной";	
 
 		if(isset($_POST['login']))
-		{
+		{			
 			$login = sanitizeMySQL($db->db_conn, $_POST['login']);
 
 			if(isset($_POST['pass']))
 			{
+				if(!isset($_SESSION['username']))
+				{
+					$_SESSION = array();
+				}
+
 				$password = sanitizeMySQL($db->db_conn, $_POST['pass']);
 				$db->make_query("SELECT * FROM users WHERE login='$login' AND pass='$password'");
 				if($db->rows_count() == 0)

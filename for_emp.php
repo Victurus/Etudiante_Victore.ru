@@ -1,10 +1,11 @@
-<?php //db_helper2.php
+<?php //for_emp.php
 	include_once "header.php";
 
 	$chosen = 'Выбирайте';
 	$choice='';
-	$button_for = "<input type='submit' value='Далее'>";
+	$button_for = "<input type='submit' name='kn_name' value='Выбрать'>";
 	$condition = '';
+	
 
 	if(!isset($_SESSION['i']))
 	{
@@ -14,9 +15,9 @@
  		unset($_SESSION['condition']);
 	}
 
-	if (isset($_POST['sumbitted']))
+	if (isset($_POST['kn_name']))
  	{
- 		switch ($_SESSION['i']) 
+ 		switch ($_SESSION['i'])
  		{
  			case '0':
  				$choice = $_POST['kn_area'];
@@ -32,14 +33,14 @@
  			case '1':
  				$choice = $_POST['kn_area'];
  				$_SESSION['query'] = "SELECT * FROM work_type WHERE workt_id='$choice'";
- 				$button_for = "<input type='button' value='Назад' onclick='location.href=\"for_emp.php\"' >";
+ 		$button_for = "<input type='button' name='kn_name' value='назад' onclick='location.href=\"for_emp.php\"'>";
  				$_SESSION['condition'] .= " AND workt_id='$choice'";
  				unset($_SESSION['i']);
  				break;
  			default:
  				$chosen = 'Выбирайте';
 				$choice='';
- 				$button_for = "<input type='submit' value='Далее'>";
+ 				$button_for = "<input type='submit' name='kn_name' value='Выбрать'>";
  				unset($_SESSION['i']);
  				break;
  		}
@@ -65,11 +66,10 @@
 <div class='main-cont'>
 	<div class='left-part'>
 		<div class="filter-name">
-			Фильтр: <?php echo $chosen; ?>
+			<?php echo "Поиск"; ?>
 		</div>
 
 		<div class="but-choose">
-			<form method='post' action='for_emp.php'>
 				<div class="fscroll">
 					<ul>
 						<?php
@@ -83,9 +83,17 @@
 							$row = $db->result->fetch_array(MYSQLI_NUM);
 
 							echo <<<_END
-
-					<li><label><div>$row[1]</div><input type="radio" name="kn_area" value="$row[0]" checked="checked"></label><li>
-							
+					<form method='post' action='for_emp.php'>
+						<li>
+							<label>
+							<div class="element_list">
+								<div class="lft">$row[1]</div>
+								<div class="rt">$button_for</div>
+								<input type="hidden" name="kn_area" value="$row[0]">
+							</div>
+							</label>
+						</li>
+					</form>
 _END;
 						}
 
@@ -95,9 +103,17 @@ _END;
 							$row = $db->result->fetch_array(MYSQLI_NUM);
 
 							echo<<<_END
-
-					<li><label><div>$row[1]</div><input type="radio" name="kn_area" value="$row[0]"></label><li>
-        
+					<form method='post' action='for_emp.php'>
+						<li>
+							<label>
+							<div class="element_list">
+								<div class="lft">$row[1]</div>
+								<div class="rt">$button_for</div>
+								<input type="hidden" name="kn_area" value="$row[0]">
+							</div>
+							</label>
+						</li>
+        			</form>
 _END;
 						}	
 						
@@ -107,12 +123,12 @@ _END;
 					</ul>
 				</div>
 
-				<div class="button-next">
+<!--				<div class="button-next">
 					<input type="hidden" name="sumbitted" value="yes">
 					<?php echo $button_for; ?>
 
-				</div>
-			</form>
+				</div>-->
+			
 		</div>
 	</div>
 

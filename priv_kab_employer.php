@@ -212,7 +212,7 @@
 		$workt_id = get_post($db->db_conn, 'workt');
 		$emp_id = $_SESSION['emp_id'];
 
-		$db->make_query("INSERT INTO vacancy VALUES ('NULL' , '$knarea_id' , '$workt_id', '$emp_id', '$name', '$description', '$salary', '$occupation', 'NULL')");
+		$db->make_query("INSERT INTO vacancy VALUES ('NULL' , '$knarea_id' , '$workt_id', '$emp_id', '$name', '$description', '$salary', '$occupation')");
 	}
 
 //////////////////////////////////////////////////////////////////////////
